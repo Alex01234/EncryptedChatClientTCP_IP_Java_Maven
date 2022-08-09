@@ -7,8 +7,9 @@ Click Next, set Group Id and Artifact Id as you like. Click Finish
 Now you should have your Maven project with JavaFX
 
 To add JUnit testing:
-Right click the folder “src” and add another folder called “test”, which should be on the same hierarchical level as the folder “main”. Add another folder inside the folder “test”, called “java”. Add a package to the folder “src/test/java” called “test”.
-Go to the file App.java and mark the keyword for the class “App”, and click ctrl+1, to bring up the option to create a new JUnit test case for the class App. Create the new test case and add JUnit 5 to the build path when prompted. Move the new test class to the package test.
+Right click the folder “src” and add another folder called “test”, which should be on the same hierarchical level as the folder “main”. Add another folder inside the folder “test”, called “java”.
+Go to the file App.java and mark the keyword for the class “App”, and click ctrl+1, to bring up the option to create a new JUnit test case for the class App. Create the new test case and add JUnit 5 to the build path when prompted. 
+Move the new test class to the folder "test", but add it to the same package as the class that is to be tested, as per this link: https://stackoverflow.com/questions/2388253/separation-of-junit-classes-into-special-test-package
 Use this framework/package to test the JavaFX GUI: https://github.com/TestFX/TestFX
 
 Add the following dependencies to the pom.xml file: 
