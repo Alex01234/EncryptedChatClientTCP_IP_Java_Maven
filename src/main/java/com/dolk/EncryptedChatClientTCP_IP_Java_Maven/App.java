@@ -8,6 +8,7 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 
+import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
@@ -189,7 +190,7 @@ public class App extends Application {
 						if (checkConnectionDetails() && !alreadyConnected) {
 							host = InetAddress.getByName(hostField.getText());
 							port = Integer.parseInt(portField.getText());
-							socket = new Socket(host, port);
+							setSocket(host, port);
 							socket.setKeepAlive(true);
 							outStream = new ObjectOutputStream(socket.getOutputStream());
 							startReceiver();
@@ -454,7 +455,7 @@ public class App extends Application {
 	/*
 	 * checkSocketStatus: TODO: Comment this
 	 */
-	private boolean checkSocketStatus() {
+	boolean checkSocketStatus() {
 		boolean socketConnected = false;
 		if (socket != null) {
 			if (socket.isConnected() && !socket.isClosed()) {
@@ -527,6 +528,14 @@ public class App extends Application {
 		alert.setResizable(true);
 		alert.showAndWait();
 	}// displayDialog
+	
+	void setSocket(InetAddress host, int port) {
+		try {
+			socket = new Socket(host, port);
+		} catch (IOException ex) {
+			ex.printStackTrace();
+		}
+	}
 
 	/*
 	 * main: The method main is used to call the method launch, which launches the

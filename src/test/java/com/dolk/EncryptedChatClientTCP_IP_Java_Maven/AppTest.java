@@ -1,6 +1,12 @@
-package test;
+package com.dolk.EncryptedChatClientTCP_IP_Java_Maven;
 
 import static org.junit.jupiter.api.Assertions.*;
+
+import java.io.IOException;
+import java.net.InetAddress;
+import java.net.ServerSocket;
+import java.net.Socket;
+import java.net.UnknownHostException;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -17,7 +23,8 @@ import javafx.stage.Stage;
 
 
 //Arrange, Act, Assert
-//given_when_then, e.g. givenDoubleMaxValueAsRadius_whenCalculateArea_thenReturnAreaAsInfinity()
+//MethodName_StateUnderTest_ExpectedBehavior
+//example: isAdult_AgeLessThan18_False
 
 /* TODO:
  * - Create tests for "check..." methods
@@ -110,13 +117,6 @@ import javafx.stage.Stage;
  * if messageAres is empty
  * */
 
-/* tests for checkSocketStatus:
- * happy path
- * if socket is null
- * if socket is not connected
- * if socket is closed
- * */
-
 /* tests for checkAllDetails:
  * happy path
  * if connectionCheck returns false
@@ -173,4 +173,31 @@ class AppTest {
         // or (lookup by css class):
         FxAssert.verifyThat(".button", LabeledMatchers.hasText("clicked!"));
     }
+    
+    /*Tests for checkSocketStatus*/
+    @Test
+    void checkSocketStatus_SocketIsConnected_True() throws IOException {
+    	//Arrange
+    	InetAddress host = InetAddress.getByName("localhost");
+    	int port = 4848;
+    	App app = new App();
+    	
+    	//TODO: Create a server socket that accepts connections at port 4848
+    	
+    	//Act
+    	app.setSocket(host, port);
+    	
+    	//Assert
+    	assertTrue(app.checkSocketStatus());
+    }
+    
+    //@Test
+    //checkSocketStatus_SocketIsNull_False
+    
+    //@Test
+    //checkSocketStatus_SocketIsNotConnected_False
+    
+    //@Test
+    //checkSocketStatus_SocketIsClosed_False
+    
 }
