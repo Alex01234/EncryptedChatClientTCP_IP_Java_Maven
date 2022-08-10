@@ -179,16 +179,23 @@ class AppTest {
     void checkSocketStatus_SocketIsConnected_True() throws IOException {
     	//Arrange
     	InetAddress host = InetAddress.getByName("localhost");
-    	int port = 4848;
+    	int port = 4847;
     	App app = new App();
     	
     	//TODO: Create a server socket that accepts connections at port 4848
+    	//TODO Start the server socket in a separate thread
+    	ServerSocket serverSocket = new ServerSocket(port);
+    	serverSocket.accept();
     	
     	//Act
     	app.setSocket(host, port);
     	
     	//Assert
     	assertTrue(app.checkSocketStatus());
+    	
+    	//Cleanup
+    	app.closeSocket();
+    	serverSocket.close();
     }
     
     //@Test

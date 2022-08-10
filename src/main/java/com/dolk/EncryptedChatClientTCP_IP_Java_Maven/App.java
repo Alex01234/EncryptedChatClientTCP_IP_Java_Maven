@@ -261,6 +261,7 @@ public class App extends Application {
 			 * disconnectButton: TODO: Comment this
 			 */
 			disconnectButton.setOnAction((EventHandler<ActionEvent>) new EventHandler<ActionEvent>() {
+				@SuppressWarnings("deprecation")
 				@Override
 				public void handle(ActionEvent e) {
 					try {
@@ -532,6 +533,14 @@ public class App extends Application {
 	void setSocket(InetAddress host, int port) {
 		try {
 			socket = new Socket(host, port);
+		} catch (IOException ex) {
+			ex.printStackTrace();
+		}
+	}
+	
+	void closeSocket() {
+		try {
+			socket.close();
 		} catch (IOException ex) {
 			ex.printStackTrace();
 		}
