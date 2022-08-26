@@ -7,6 +7,7 @@ import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -129,65 +130,91 @@ import javafx.stage.Stage;
 
 @ExtendWith(ApplicationExtension.class)
 class AppTest {
-
-    private Button button;
-
-    /**
-     * Will be called with {@code @Before} semantics, i. e. before each test method.
-     *
-     * @param stage - Will be injected by the test runner.
-     */
-    @Start
-    private void start(Stage stage) {
-        button = new Button("click me!");
-        button.setId("myButton");
-        button.setOnAction(actionEvent -> button.setText("clicked!"));
-        stage.setScene(new Scene(new StackPane(button), 100, 100));
-        stage.show();
-    }
-
-    /**
-     * @param robot - Will be injected by the test runner.
-     */
-    @Test
-    void should_contain_button_with_text(FxRobot robot) {
-        FxAssert.verifyThat(button, LabeledMatchers.hasText("click me!"));
-        // or (lookup by css id):
-        FxAssert.verifyThat("#myButton", LabeledMatchers.hasText("click me!"));
-        // or (lookup by css class):
-        FxAssert.verifyThat(".button", LabeledMatchers.hasText("click me!"));
-    }
-
-    /**
-     * @param robot - Will be injected by the test runner.
-     */
-    @Test
-    void when_button_is_clicked_text_changes(FxRobot robot) {
-        // when:
-        robot.clickOn(".button");
-
-        // then:
-        FxAssert.verifyThat(button, LabeledMatchers.hasText("clicked!"));
-        // or (lookup by css id):
-        FxAssert.verifyThat("#myButton", LabeledMatchers.hasText("clicked!"));
-        // or (lookup by css class):
-        FxAssert.verifyThat(".button", LabeledMatchers.hasText("clicked!"));
-    }
+	class ServerSocketClass implements Runnable {
+		private Thread t;
+		private final AtomicBoolean running = new AtomicBoolean(false);
+		ServerSocket serverSocket = null;
+		
+		public void start(int port) {
+	        t = new Thread(this);
+	        try {
+				serverSocket = new ServerSocket(port);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+	        t.start();
+	    }
+	 
+	    public void stop() {
+	        running.set(false);
+	    }
+	    
+	    public void run() {
+	    	running.set(true);
+	    	while(running.get()) {
+	    		try {
+					serverSocket.accept();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+	    	}
+	    }
+	}
+//    private Button button;
+//
+//    /**
+//     * Will be called with {@code @Before} semantics, i. e. before each test method.
+//     *
+//     * @param stage - Will be injected by the test runner.
+//     */
+//    @Start
+//    private void start(Stage stage) {
+//        button = new Button("click me!");
+//        button.setId("myButton");
+//        button.setOnAction(actionEvent -> button.setText("clicked!"));
+//        stage.setScene(new Scene(new StackPane(button), 100, 100));
+//        stage.show();
+//    }
+//
+//    /**
+//     * @param robot - Will be injected by the test runner.
+//     */
+//    @Test
+//    void should_contain_button_with_text(FxRobot robot) {
+//        FxAssert.verifyThat(button, LabeledMatchers.hasText("click me!"));
+//        // or (lookup by css id):
+//        FxAssert.verifyThat("#myButton", LabeledMatchers.hasText("click me!"));
+//        // or (lookup by css class):
+//        FxAssert.verifyThat(".button", LabeledMatchers.hasText("click me!"));
+//    }
+//
+//    /**
+//     * @param robot - Will be injected by the test runner.
+//     */
+//    @Test
+//    void when_button_is_clicked_text_changes(FxRobot robot) {
+//        // when:
+//        robot.clickOn(".button");
+//
+//        // then:
+//        FxAssert.verifyThat(button, LabeledMatchers.hasText("clicked!"));
+//        // or (lookup by css id):
+//        FxAssert.verifyThat("#myButton", LabeledMatchers.hasText("clicked!"));
+//        // or (lookup by css class):
+//        FxAssert.verifyThat(".button", LabeledMatchers.hasText("clicked!"));
+//    }
     
     /*Tests for checkSocketStatus*/
-    @Test
+	@Test
     void checkSocketStatus_SocketIsConnected_True() throws IOException {
     	//Arrange
     	InetAddress host = InetAddress.getByName("localhost");
-    	int port = 4847;
     	App app = new App();
-    	
-    	//TODO: Create a server socket that accepts connections at port 4848
-    	//TODO Start the server socket in a separate thread
-    	ServerSocket serverSocket = new ServerSocket(port);
-    	serverSocket.accept();
+    	ServerSocketClass scs = new ServerSocketClass();
+    	int port = 4001;
     	
     	//Act
+    	scs.start(port);
     	app.setSocket(host, port);
     	
     	//Assert
@@ -195,16 +222,55 @@ class AppTest {
     	
     	//Cleanup
     	app.closeSocket();
-    	serverSocket.close();
+    	scs.stop();
     }
     
-    //@Test
-    //checkSocketStatus_SocketIsNull_False
+    @Test
+    void checkSocketStatus_SocketIsNull_False() throws UnknownHostException {
+    	//Arrange
+    	InetAddress host = InetAddress.getByName("localhost");
+    	App app = new App();
+    	
+    	//Assert
+    	assertFalse(app.checkSocketStatus());
+    	
+    }
     
-    //@Test
-    //checkSocketStatus_SocketIsNotConnected_False
+    @Test
+    void checkSocketStatus_SocketIsNotConnected_False() throws UnknownHostException {
+    	//Arrange
+    	InetAddress host = InetAddress.getByName("localhost");
+    	App app = new App();
+    	int port = 4003;
+    	
+    	//Act
+    	app.setSocket(host, port);
+    	
+    	//Assert
+    	assertFalse(app.checkSocketStatus());
+    	
+    }
     
-    //@Test
-    //checkSocketStatus_SocketIsClosed_False
+    @Test
+    void checkSocketStatus_SocketIsClosed_False() throws UnknownHostException {
+    	//Arrange
+    	InetAddress host = InetAddress.getByName("localhost");
+    	App app = new App();
+    	ServerSocketClass scs = new ServerSocketClass();
+    	int port = 4004;
+    	
+    	//Act
+    	scs.start(port);
+    	app.setSocket(host, port);
+    	app.closeSocket();
+    	
+    	//Assert
+    	assertFalse(app.checkSocketStatus());
+    	
+    	//Cleanup
+    	scs.stop();
+    } //This test throws generates an exception via the method setSocket in the class App. 
+	
+	/*End of tests for checkSocketStatus*/
     
 }
