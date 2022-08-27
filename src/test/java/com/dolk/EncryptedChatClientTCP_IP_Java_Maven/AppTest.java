@@ -23,16 +23,11 @@ import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 
 
+//NEXT: https://medium.com/information-and-technology/test-driven-development-in-javafx-with-testfx-66a84cd561e0
+
 //Arrange, Act, Assert
 //MethodName_StateUnderTest_ExpectedBehavior
 //example: isAdult_AgeLessThan18_False
-
-/* TODO:
- * - Create tests for "check..." methods
- * - startReceiver
- * - recevingTask
- * - buttons
- * */
 
 /* Resources: 
  * https://www.vogella.com/tutorials/JUnit/article.html
@@ -44,89 +39,6 @@ import javafx.stage.Stage;
  * https://github.com/TestFX/TestFX/issues/638
  * */
 
-/*
- * tests for connectButton.SetOnAction:
- * happy path
- * if socket is null
- * if socket is not connected
- * if socket is closed
- * if checkConnectionDetails returns false
- * if already connected
- * test connection to the server, or should it be tested in via the startReceiver method?
-*/
-
-/*
- * tests for messageButton.setOnAction:
- * happy path
- * if checkAllDetails returns false
- * test to writeObject
- * */
-
-/*
- * tests for disconnectButton.setOnAction:
- * happy path
- * if socket is null
- * if socket is not connected
- * if socket is closed
- * 
- * */
-
-/*
- * tests for startReceiver:
- * test that the receiving thread starts
- * */
-
-/*
- * tests for receivingTask:
- * happy path
- * socket not created
- * */
-
-/* tests for checkConnectionDetails:
- * happy path
- * if hostField is null
- * if hostField is empty
- * if portField is empty
- * if portField is null
- * */
-
-/* tests for checkUsernameDetails:
- * happy path
- * if usernameField is null
- * if usernameField is empty
- * */
-
-/* tests for checkPasswordDetails:
- * happy path
- * if firstPasswordField is null
- * if firstPasswordFiled is empty
- * if secondPasswordField is null
- * if secondPasswordField is empty
- * */
-
-/* tests for checkPasswordBits
- * happy path
- * if password1Bytes is not 16 
- * if password2Bytes is not 16
- * if control1 is false
- * if control2 is false
- * */
-
-/* tests for checkMessageDetails
- * happy path
- * if messageArea is null
- * if messageAres is empty
- * */
-
-/* tests for checkAllDetails:
- * happy path
- * if connectionCheck returns false
- * if socketCheck returns false
- * if usernameCheck returns false
- * if passwordCheck returns false
- * if passwordBitCheck returns false
- * if messageCheck returns false
- * */
 
 @ExtendWith(ApplicationExtension.class)
 class AppTest {
@@ -203,8 +115,85 @@ class AppTest {
 //        // or (lookup by css class):
 //        FxAssert.verifyThat(".button", LabeledMatchers.hasText("clicked!"));
 //    }
-    
-    /*Tests for checkSocketStatus*/
+	
+	//@Test
+	//void connectButton_ClientBecomesConnected_x()
+	//@Test
+	//void connectButton_SocketIsNull_x()
+	//@Test
+	//void connectButton_SocketDoesNotBecomeConnected_x()
+	//@Test
+	//void connectButton_SocketRemainsClosed_x()
+	//@Test
+	//void connectButton_checkConnectionDetailsReturnsFalse_x()
+	//@Test
+	//void connectButton_SocketAlreadyConnected_x()
+	
+	//@Test
+	//void messageButton_MessageIsSent_x()
+	//@Test
+	//void messageButton_CheckAllDetailsIsFalseMessageNotSent_x()
+	
+	//@Test
+	//void disconnectButton_ClientIsDisconnected_x()
+	//@Test
+	//void disconnectButton_SocketIsNull_x()
+	//@Test
+	//void disconnectButton_SocketIsNotConnected_x()
+	//@Test
+	//void disconnectButton_SocketIsClosed_x()
+	
+	//@Test
+	//void startReceiver_recivingThreadStarted_x()
+	
+	//@Test
+	//void receivingTask_ClientReceivesMessage_x()
+	//@Test
+	//void receivingTask_ClientDoesNotReceiveMessages_x()
+	
+	//@Test
+	//void checkConnectionDetails_AllDetailsPresent_True()
+	//@Test
+	//void checkConnectionDetails_hostFieldIsNull_False()
+	//@Test
+	//void checkConnectionDetails_hostFieldIsEmpty_False()
+	//@Test
+	//void checkConnectionDetails_portFieldIsNull_False()
+	//@Test
+	//void checkConnectionDetails_portFieldIsEmpty_False()
+	
+	//@Test
+	//void checkUsernameDetails_UsernamePresent_True()
+	//@Test
+	//void checkUsernameDetails_usernameFieldIsNull_False()
+	//@Test
+	//void checkUsernameDetails_usernameFieldIsEmpty_False()
+	
+	//@Test
+	//void checkPasswordBits_BothPasswordsExist_True()
+	//@Test
+	//void checkPasswordBits_firstPasswordFieldIsNull_False()
+	//@Test
+	//void checkPasswordBits_firstPasswordFieldIsEmpty_False()
+	//@Test
+	//void checkPasswordBits_secondPasswordFieldIsNull_False()
+	//@Test
+	//void checkPasswordBits_secondPasswordFieldIsEmpty_False()
+	
+	//@Test
+	//void checkPasswordBits_BothPasswordsAre16Bytes_True()
+	//@Test
+	//void checkPasswordBits_password1BytesNot16Bytes_False()
+	//@Test
+	//void checkPasswordBits_password2BytesNot16Bytes_False()
+	
+	//@Test
+	//void checkMessageDetails_MessageAreaHasText_True()
+	//@Test
+	//void checkMessageDetails_MessageAreaGetTextIsNull_False()
+	//@Test
+	//void checkMessageDetails_MessageAreaGetTextIsEmpty_False()
+	
 	@Test
     void checkSocketStatus_SocketIsConnected_True() throws IOException {
     	//Arrange
@@ -270,7 +259,10 @@ class AppTest {
     	//Cleanup
     	scs.stop();
     } //This test throws generates an exception via the method setSocket in the class App. 
-	
-	/*End of tests for checkSocketStatus*/
+    
+    //@Test
+    //void checkAllDetails_AllDetailsAreFilled_True()
+    //@Test
+    //void checkAllDetails_DetailMissing_False()
     
 }
