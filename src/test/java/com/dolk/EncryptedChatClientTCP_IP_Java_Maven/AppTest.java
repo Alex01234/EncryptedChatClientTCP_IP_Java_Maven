@@ -182,16 +182,32 @@ class AppTest {
 	//@Test
 	//void receivingTask_ClientDoesNotReceiveMessages_x()
 	
-	//@Test
-	//void checkConnectionDetails_AllDetailsPresent_True()
-	//@Test
-	//void checkConnectionDetails_hostFieldIsNull_False()
-	//@Test
-	//void checkConnectionDetails_hostFieldIsEmpty_False()
-	//@Test
-	//void checkConnectionDetails_portFieldIsNull_False()
-	//@Test
-	//void checkConnectionDetails_portFieldIsEmpty_False()
+	@Test
+	void checkConnectionDetails_AllDetailsPresent_True(FxRobot robot) {
+		robot.clickOn("#hostField").write("localhost");
+		robot.clickOn("#portField").write("4848");
+		FxAssert.verifyThat("#hostField", TextInputControlMatchers.hasText("localhost"));
+		FxAssert.verifyThat("#portField", TextInputControlMatchers.hasText("4848"));
+		assertTrue(app.checkConnectionDetails());
+	}
+    
+	@Test
+	void checkConnectionDetails_hostFieldIsEmpty_False(FxRobot robot) {
+		robot.clickOn("#hostField").write(" ");
+		robot.clickOn("#portField").write("4848");
+		FxAssert.verifyThat("#hostField", TextInputControlMatchers.hasText(" "));
+		FxAssert.verifyThat("#portField", TextInputControlMatchers.hasText("4848"));
+		assertFalse(app.checkConnectionDetails());
+	}
+
+	@Test
+	void checkConnectionDetails_portFieldIsEmpty_False(FxRobot robot) {
+		robot.clickOn("#hostField").write("localhost");
+		robot.clickOn("#portField").write(" ");
+		FxAssert.verifyThat("#hostField", TextInputControlMatchers.hasText("localhost"));
+		FxAssert.verifyThat("#portField", TextInputControlMatchers.hasText(" "));
+		assertFalse(app.checkConnectionDetails());
+	}
 	
 	@Test
 	void checkUsernameDetails_UsernamePresent_True(FxRobot robot) {

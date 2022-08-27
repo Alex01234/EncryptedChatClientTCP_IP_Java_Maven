@@ -366,7 +366,7 @@ public class App extends Application {
 	 * and portField contains text, the color of the text on connectButton is set to
 	 * green and the method returns true.
 	 */
-	private boolean checkConnectionDetails() {
+	boolean checkConnectionDetails() {
 		if (hostField.getText() == null || hostField.getText().trim().isEmpty() || portField.getText() == null
 				|| portField.getText().trim().isEmpty()) {
 			connectButton.setStyle("-fx-text-fill: #ff0000"); // changes color of text in button to red
