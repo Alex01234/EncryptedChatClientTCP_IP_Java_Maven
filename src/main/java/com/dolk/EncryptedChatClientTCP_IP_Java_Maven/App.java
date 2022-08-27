@@ -480,7 +480,7 @@ public class App extends Application {
 	 * 
 	 * TODO: Update comments
 	 */
-	private boolean checkAllDetails() throws UnsupportedEncodingException {
+	boolean checkAllDetails() throws UnsupportedEncodingException {
 		boolean connectionCheck = checkConnectionDetails();
 		boolean socketCheck = checkSocketStatus();
 		boolean usernameCheck = checkUsernameDetails();

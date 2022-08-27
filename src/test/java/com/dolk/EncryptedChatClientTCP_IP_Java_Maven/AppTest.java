@@ -21,6 +21,7 @@ import org.testfx.framework.junit5.Start;
 import org.testfx.matcher.control.LabeledMatchers;
 import org.testfx.matcher.control.TextInputControlMatchers;
 
+import javafx.application.Platform;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.input.KeyCode;
@@ -214,13 +215,13 @@ class AppTest {
 		robot.clickOn("#usernameField").write("John Doe");
 		FxAssert.verifyThat("#usernameField", TextInputControlMatchers.hasText("John Doe"));
 		assertTrue(app.checkUsernameDetails());
-		assertFalse(app.checkUsernameDetails());
 	}
 	
 	@Test
 	void checkUsernameDetails_usernameFieldIsEmpty_False(FxRobot robot) {
 		robot.clickOn("#usernameField").write(" ");
 		FxAssert.verifyThat("#usernameField", TextInputControlMatchers.hasText(" "));
+		assertFalse(app.checkUsernameDetails());
 	}
 	
 	@Test
@@ -347,9 +348,31 @@ class AppTest {
     	scs.stop();
     } //This test throws generates an exception via the method setSocket in the class App. 
     
-    //@Test
-    //void checkAllDetails_AllDetailsAreFilled_True()
-    //@Test
-    //void checkAllDetails_DetailMissing_False()
-    
+    @Test
+    void checkAllDetails_AllDetailsAreFilled_True(FxRobot robot) throws UnsupportedEncodingException, UnknownHostException {
+    	robot.clickOn("#hostField").write("localhost");
+		robot.clickOn("#portField").write("4848");
+		FxAssert.verifyThat("#hostField", TextInputControlMatchers.hasText("localhost"));
+		FxAssert.verifyThat("#portField", TextInputControlMatchers.hasText("4848"));
+		robot.clickOn("#usernameField").write("John Doe");
+		FxAssert.verifyThat("#usernameField", TextInputControlMatchers.hasText("John Doe"));
+		robot.clickOn("#firstPasswordField").write("0JZGv0hwh7PiU548");
+		robot.clickOn("#secondPasswordField").write("95FdIBeP46LyIo2k");
+		FxAssert.verifyThat("#firstPasswordField",TextInputControlMatchers.hasText("0JZGv0hwh7PiU548"));
+		FxAssert.verifyThat("#secondPasswordField",TextInputControlMatchers.hasText("95FdIBeP46LyIo2k"));
+		robot.clickOn("#messageArea").write("A new message");
+		FxAssert.verifyThat("#messageArea", TextInputControlMatchers.hasText("A new message"));
+		
+    	InetAddress host = InetAddress.getByName("localhost");
+    	ServerSocketClass scs = new ServerSocketClass();
+    	int port = 4005;
+    	scs.start(port);
+    	app.setSocket(host, port);
+    	
+    	assertTrue(app.checkAllDetails());
+    	
+    	app.closeSocket();
+    	scs.stop();
+    }
+        
 }
