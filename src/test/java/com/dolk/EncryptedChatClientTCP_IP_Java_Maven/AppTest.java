@@ -91,12 +91,12 @@ class AppTest {
 	
 //    private Button button;
 
-    /**
-     * Will be called with {@code @Before} semantics, i. e. before each test method.
-     *
-     * @param stage - Will be injected by the test runner.
-     * @throws UnsupportedEncodingException 
-     */
+//    /**
+//     * Will be called with {@code @Before} semantics, i. e. before each test method.
+//     *
+//     * @param stage - Will be injected by the test runner.
+//     * @throws UnsupportedEncodingException 
+//     */
 //    @Start
 //    private void start(Stage stage) {
 //        button = new Button("click me!");
@@ -220,12 +220,23 @@ class AppTest {
 		assertTrue(app.checkPasswordBits());
 	}
     
-	//@Test
-	//void checkPasswordBits_password1BytesNot16Bytes_False()
+	@Test
+	void checkPasswordBits_password1BytesNot16Bytes_False(FxRobot robot) throws UnsupportedEncodingException {
+		robot.clickOn("#firstPasswordField").write("0JZGv0hwh7PiU54");
+		robot.clickOn("#secondPasswordField").write("95FdIBeP46LyIo2k");
+		FxAssert.verifyThat("#firstPasswordField",TextInputControlMatchers.hasText("0JZGv0hwh7PiU54"));
+		FxAssert.verifyThat("#secondPasswordField",TextInputControlMatchers.hasText("95FdIBeP46LyIo2k"));
+		assertFalse(app.checkPasswordBits());
+	}
 	
-	
-	//@Test
-	//void checkPasswordBits_password2BytesNot16Bytes_False()
+	@Test
+	void checkPasswordBits_password2BytesNot16Bytes_False(FxRobot robot) throws UnsupportedEncodingException {
+		robot.clickOn("#firstPasswordField").write("0JZGv0hwh7PiU548");
+		robot.clickOn("#secondPasswordField").write("95FdIBeP46LyIo2");
+		FxAssert.verifyThat("#firstPasswordField",TextInputControlMatchers.hasText("0JZGv0hwh7PiU548"));
+		FxAssert.verifyThat("#secondPasswordField",TextInputControlMatchers.hasText("95FdIBeP46LyIo2"));
+		assertFalse(app.checkPasswordBits());
+	}
 	
 	@Test
 	void checkMessageDetails_MessageAreaHasText_True(FxRobot robot) {	
