@@ -109,11 +109,11 @@ public class App extends Application {
 			northBox.setPadding(new Insets(15, 12, 15, 12));
 			northBox.setSpacing(10);
 			hostLabel = new Label("Host:");
-			hostField = new TextField();
+			hostField = new TextField(); hostField.setId("hostField");
 			portLabel = new Label("Port:");
-			portField = new TextField();
-			connectButton = new Button("Connect to server");
-			disconnectButton = new Button("Disconnect from server");
+			portField = new TextField(); portField.setId("portField");
+			connectButton = new Button("Connect to server"); connectButton.setId("connectButton");
+			disconnectButton = new Button("Disconnect from server"); disconnectButton.setId("disconnectButton");
 			northBox.getChildren().addAll(hostLabel, hostField, portLabel, portField, connectButton, disconnectButton);
 
 			// Center HBox:
@@ -123,6 +123,7 @@ public class App extends Application {
 			serverArea = new TextArea();
 			serverArea.setWrapText(true);
 			serverArea.setEditable(false);
+			serverArea.setId("serverArea");
 			centerBox.getChildren().addAll(serverArea);
 			serverArea.appendText(welcomeText);
 
@@ -131,11 +132,11 @@ public class App extends Application {
 			rightBox.setPadding(new Insets(10));
 			rightBox.setSpacing(8);
 			usernameLabel = new Label("Username:");
-			usernameField = new TextField();
+			usernameField = new TextField(); usernameField.setId("usernameField");
 			firstPasswordLabel = new Label("Password 1:");
-			firstPasswordField = new TextField();
+			firstPasswordField = new TextField(); firstPasswordField.setId("firstPasswordField");
 			secondPasswordLabel = new Label("Password 2:");
-			secondPasswordField = new TextField();
+			secondPasswordField = new TextField(); secondPasswordField.setId("secondPasswordField");
 			rightBox.getChildren().addAll(usernameLabel, usernameField, firstPasswordLabel, firstPasswordField,
 					secondPasswordLabel, secondPasswordField);
 
@@ -143,8 +144,8 @@ public class App extends Application {
 			HBox bottomBox = new HBox();
 			bottomBox.setPadding(new Insets(10));
 			bottomBox.setSpacing(8);
-			messageArea = new TextArea();
-			messageButton = new Button("Send message");
+			messageArea = new TextArea(); messageArea.setId("messageArea");
+			messageButton = new Button("Send message"); messageButton.setId("messageButton");
 			bottomBox.getChildren().addAll(messageArea, messageButton);
 
 			root.setTop(northBox);
@@ -396,7 +397,7 @@ public class App extends Application {
 	 * returns false. If both firstPasswordField and secondPasswordField contains
 	 * text, the method returns true.
 	 */
-	private boolean checkPasswordDetails() {
+	boolean checkPasswordDetails() {
 		if (firstPasswordField.getText() == null || firstPasswordField.getText().trim().isEmpty()
 				|| secondPasswordField.getText() == null || secondPasswordField.getText().trim().isEmpty()) {
 			return false;
@@ -414,7 +415,7 @@ public class App extends Application {
 	 * texts to firstPasswordField and secondPasswordField are 16 bytes in length,
 	 * the method returns true.
 	 */
-	private boolean checkPasswordBits() throws UnsupportedEncodingException {
+	boolean checkPasswordBits() throws UnsupportedEncodingException {
 		boolean control1 = true;
 		boolean control2 = true;
 
@@ -443,7 +444,7 @@ public class App extends Application {
 	 * the method returns false. If messageArea contains text, the color of the text
 	 * on messageButton is changed to green and the method returns true.
 	 */
-	private boolean checkMessageDetails() {
+	boolean checkMessageDetails() {
 		if (messageArea.getText() == null || messageArea.getText().trim().isEmpty()) {
 			messageButton.setStyle("-fx-text-fill: #ff0000"); // changes color of text in button to red
 			return false;
