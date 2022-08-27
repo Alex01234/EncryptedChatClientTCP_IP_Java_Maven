@@ -193,12 +193,19 @@ class AppTest {
 	//@Test
 	//void checkConnectionDetails_portFieldIsEmpty_False()
 	
-	//@Test
-	//void checkUsernameDetails_UsernamePresent_True()
-	//@Test
-	//void checkUsernameDetails_usernameFieldIsNull_False()
-	//@Test
-	//void checkUsernameDetails_usernameFieldIsEmpty_False()
+	@Test
+	void checkUsernameDetails_UsernamePresent_True(FxRobot robot) {
+		robot.clickOn("#usernameField").write("John Doe");
+		FxAssert.verifyThat("#usernameField", TextInputControlMatchers.hasText("John Doe"));
+		assertTrue(app.checkUsernameDetails());
+		assertFalse(app.checkUsernameDetails());
+	}
+	
+	@Test
+	void checkUsernameDetails_usernameFieldIsEmpty_False(FxRobot robot) {
+		robot.clickOn("#usernameField").write(" ");
+		FxAssert.verifyThat("#usernameField", TextInputControlMatchers.hasText(" "));
+	}
 	
 	@Test
 	void checkPasswordDetails_BothPasswordsExist_True(FxRobot robot) {

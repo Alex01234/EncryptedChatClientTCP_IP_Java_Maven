@@ -382,7 +382,7 @@ public class App extends Application {
 	 * TextField usernameField contains text or is empty. If usernameField is empty,
 	 * the method returns false. Otherwise, the method returns true.
 	 */
-	private boolean checkUsernameDetails() {
+	boolean checkUsernameDetails() {
 		if (usernameField.getText() == null || usernameField.getText().trim().isEmpty()) {
 			return false;
 		} else {
