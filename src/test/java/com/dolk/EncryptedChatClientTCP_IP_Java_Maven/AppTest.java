@@ -200,16 +200,33 @@ class AppTest {
 	//@Test
 	//void checkUsernameDetails_usernameFieldIsEmpty_False()
 	
-	//@Test
-	//void checkPasswordDetails_BothPasswordsExist_True()
-	//@Test
-	//void checkPasswordDetails_firstPasswordFieldIsNull_False()
-	//@Test
-	//void checkPasswordDetails_firstPasswordFieldIsEmpty_False()
-	//@Test
-	//void checkPasswordDetails_secondPasswordFieldIsNull_False()
-	//@Test
-	//void checkPasswordDetails_secondPasswordFieldIsEmpty_False()
+	@Test
+	void checkPasswordDetails_BothPasswordsExist_True(FxRobot robot) {
+		robot.clickOn("#firstPasswordField").write("0JZGv0hwh7PiU548");
+		robot.clickOn("#secondPasswordField").write("95FdIBeP46LyIo2k");
+		FxAssert.verifyThat("#firstPasswordField",TextInputControlMatchers.hasText("0JZGv0hwh7PiU548"));
+		FxAssert.verifyThat("#secondPasswordField",TextInputControlMatchers.hasText("95FdIBeP46LyIo2k"));
+		assertTrue(app.checkPasswordDetails());
+	}
+    
+	@Test
+	void checkPasswordDetails_firstPasswordFieldIsEmpty_False(FxRobot robot){
+		robot.clickOn("#firstPasswordField").write(" ");
+		robot.clickOn("#secondPasswordField").write("95FdIBeP46LyIo2k");
+		FxAssert.verifyThat("#firstPasswordField",TextInputControlMatchers.hasText(" "));
+		FxAssert.verifyThat("#secondPasswordField",TextInputControlMatchers.hasText("95FdIBeP46LyIo2k"));
+		assertFalse(app.checkPasswordDetails());
+	}
+    
+	@Test
+	void checkPasswordDetails_secondPasswordFieldIsEmpty_False(FxRobot robot) {
+		robot.clickOn("#firstPasswordField").write("0JZGv0hwh7PiU548");
+		robot.clickOn("#secondPasswordField").write(" ");
+		FxAssert.verifyThat("#firstPasswordField",TextInputControlMatchers.hasText("0JZGv0hwh7PiU548"));
+		FxAssert.verifyThat("#secondPasswordField",TextInputControlMatchers.hasText(" "));
+		assertFalse(app.checkPasswordDetails());
+	}
+    
 	
 	@Test
 	void checkPasswordBits_BothPasswordsAre16Bytes_True(FxRobot robot) throws UnsupportedEncodingException {
@@ -221,7 +238,7 @@ class AppTest {
 	}
     
 	@Test
-	void checkPasswordBits_password1BytesNot16Bytes_False(FxRobot robot) throws UnsupportedEncodingException {
+	void checkPasswordBits_firstPasswordFieldNot16Bytes_False(FxRobot robot) throws UnsupportedEncodingException {
 		robot.clickOn("#firstPasswordField").write("0JZGv0hwh7PiU54");
 		robot.clickOn("#secondPasswordField").write("95FdIBeP46LyIo2k");
 		FxAssert.verifyThat("#firstPasswordField",TextInputControlMatchers.hasText("0JZGv0hwh7PiU54"));
@@ -230,7 +247,7 @@ class AppTest {
 	}
 	
 	@Test
-	void checkPasswordBits_password2BytesNot16Bytes_False(FxRobot robot) throws UnsupportedEncodingException {
+	void checkPasswordBits_secondPasswordFieldNot16Bytes_False(FxRobot robot) throws UnsupportedEncodingException {
 		robot.clickOn("#firstPasswordField").write("0JZGv0hwh7PiU548");
 		robot.clickOn("#secondPasswordField").write("95FdIBeP46LyIo2");
 		FxAssert.verifyThat("#firstPasswordField",TextInputControlMatchers.hasText("0JZGv0hwh7PiU548"));
