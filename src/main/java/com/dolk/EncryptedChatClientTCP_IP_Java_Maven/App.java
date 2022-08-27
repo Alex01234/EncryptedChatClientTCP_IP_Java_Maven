@@ -70,7 +70,7 @@ public class App extends Application {
 	private Label secondPasswordLabel;
 	private TextField secondPasswordField;
 	// Bottom Hbox
-	private TextArea messageArea;
+	TextArea messageArea;
 	private Button messageButton;
 
 	private static String welcomeText = "Welcome to the Sealed Chat Client." + "\n"

@@ -175,13 +175,24 @@ class AppTest {
 	//@Test
 	//void disconnectButton_SocketIsClosed_x()
 	
-	//@Test
-	//void startReceiver_recivingThreadStarted_x()
 	
-	//@Test
-	//void receivingTask_ClientReceivesMessage_x()
-	//@Test
-	//void receivingTask_ClientDoesNotReceiveMessages_x()
+	@Test
+	void receivingTask_ClientReceivesMessage_x(FxRobot robot) {
+		//Create a server that accepts a connection, encrypts a message, and sends it to the client
+		
+		//Setup this client
+		
+		//Make sure that the last row of messageArea is the message received
+		
+		
+		robot.clickOn("#messageArea").write("Hello There");
+		
+		String messageAreaText = app.messageArea.getText();
+		String[] lines = messageAreaText.split("\n");
+		String lastLine = lines[lines.length -1];
+		System.out.println(lastLine);
+		assertEquals(lastLine, "Hello There");
+	}
 	
 	@Test
 	void checkConnectionDetails_AllDetailsPresent_True(FxRobot robot) {
