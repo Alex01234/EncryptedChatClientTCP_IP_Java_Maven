@@ -61,7 +61,7 @@ public class App extends Application {
 	private Button connectButton;
 	private Button disconnectButton;
 	// Center HBox
-	private TextArea serverArea;
+	TextArea serverArea;
 	// Right VBox
 	private Label usernameLabel;
 	private TextField usernameField;
@@ -332,9 +332,10 @@ public class App extends Application {
 	private void receivingTask() {
 		try {
 			running.set(true);
+			inStream = new ObjectInputStream(socket.getInputStream());
 			while (running.get()) {
 
-					inStream = new ObjectInputStream(socket.getInputStream());
+					//inStream = new ObjectInputStream(socket.getInputStream());
 					SealedObject sealedObject = (SealedObject) inStream.readObject();
 
 					IvParameterSpec iv = new IvParameterSpec(firstPasswordField.getText().getBytes("UTF-8"));

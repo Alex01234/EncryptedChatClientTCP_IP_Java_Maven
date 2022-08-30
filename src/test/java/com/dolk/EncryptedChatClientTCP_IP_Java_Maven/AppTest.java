@@ -49,38 +49,7 @@ import javafx.stage.Stage;
 class AppTest {
 	
 	App app;
-	
-	class ServerSocketClass implements Runnable {
-		private Thread t;
-		private final AtomicBoolean running = new AtomicBoolean(false);
-		ServerSocket serverSocket = null;
 		
-		public void start(int port) {
-	        t = new Thread(this);
-	        try {
-				serverSocket = new ServerSocket(port);
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-	        t.start();
-	    }
-	 
-	    public void stop() {
-	        running.set(false);
-	    }
-	    
-	    public void run() {
-	    	running.set(true);
-	    	while(running.get()) {
-	    		try {
-					serverSocket.accept();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-	    	}
-	    }
-	}
-	
 	//Will be called with {@code @Before} semantics, i. e. before each test method.
 	//@param stage - Will be injected by the test runner.
     @Start
@@ -185,13 +154,42 @@ class AppTest {
 		//Make sure that the last row of messageArea is the message received
 		
 		
-		robot.clickOn("#messageArea").write("Hello There");
+//		robot.clickOn("#messageArea").write("Hello There");
+//		
+//		String messageAreaText = app.messageArea.getText();
+//		String[] lines = messageAreaText.split("\n");
+//		String lastLine = lines[lines.length -1];
+//		System.out.println(lastLine);
+//		assertEquals(lastLine, "Hello There");
 		
-		String messageAreaText = app.messageArea.getText();
+		//Server.main();
+		
+		Thread t = new Thread() {
+			public void run() {
+				Server.main();
+			}
+		};
+		t.start();
+		
+		robot.clickOn("#hostField").write("localhost");
+		robot.clickOn("#portField").write("4848");
+		robot.clickOn("#usernameField").write("TestUser");
+		robot.clickOn("#firstPasswordField").write("0JZGv0hwh7PiU548");
+		robot.clickOn("#secondPasswordField").write("95FdIBeP46LyIo2k");
+		robot.clickOn("#messageArea").write("Test message");
+		robot.clickOn("#connectButton");
+		robot.clickOn("#messageButton");
+		
+		String messageAreaText = app.serverArea.getText();
 		String[] lines = messageAreaText.split("\n");
 		String lastLine = lines[lines.length -1];
-		System.out.println(lastLine);
-		assertEquals(lastLine, "Hello There");
+		assertEquals(lastLine, "[TestUser]: Test message");
+		
+		//TODO: Next step is to create get and set methods for App.java to set all details above
+		//also, break out the methods of connecting, sending and disconnecting that can be called without GUI
+		//so App.java needs some refactoring
+		//Then a second client can be created without a GUI, that can connect and send a message, so that this can be tested for real
+		
 	}
 	
 	@Test
@@ -309,7 +307,7 @@ class AppTest {
     	//Arrange
     	InetAddress host = InetAddress.getByName("localhost");
     	App app = new App();
-    	ServerSocketClass scs = new ServerSocketClass();
+    	ServerSocketMock scs = new ServerSocketMock();
     	int port = 4001;
     	//Act
     	scs.start(port);
@@ -347,7 +345,7 @@ class AppTest {
     	//Arrange
     	InetAddress host = InetAddress.getByName("localhost");
     	App app = new App();
-    	ServerSocketClass scs = new ServerSocketClass();
+    	ServerSocketMock scs = new ServerSocketMock();
     	int port = 4004;
     	//Act
     	scs.start(port);
@@ -375,7 +373,7 @@ class AppTest {
 		FxAssert.verifyThat("#messageArea", TextInputControlMatchers.hasText("A new message"));
 		
     	InetAddress host = InetAddress.getByName("localhost");
-    	ServerSocketClass scs = new ServerSocketClass();
+    	ServerSocketMock scs = new ServerSocketMock();
     	int port = 4005;
     	scs.start(port);
     	app.setSocket(host, port);
