@@ -61,7 +61,7 @@ public class App extends Application {
 	private Button connectButton;
 	private Button disconnectButton;
 	// Center HBox
-	TextArea serverArea;
+	private TextArea serverArea;
 	// Right VBox
 	private Label usernameLabel;
 	private TextField usernameField;
@@ -70,7 +70,7 @@ public class App extends Application {
 	private Label secondPasswordLabel;
 	private TextField secondPasswordField;
 	// Bottom Hbox
-	TextArea messageArea;
+	private TextArea messageArea;
 	private Button messageButton;
 
 	private static String welcomeText = "Welcome to the Sealed Chat Client." + "\n"
@@ -180,36 +180,8 @@ public class App extends Application {
 			connectButton.setOnAction((EventHandler<ActionEvent>) new EventHandler<ActionEvent>() {
 				@Override
 				public void handle(ActionEvent e) {
-					try {
-						boolean alreadyConnected = false;
-						if(socket != null) {
-							if(socket.isConnected() && !socket.isClosed()){
-								displayDialog("Client already connected to server.");
-								alreadyConnected = true;
-							}
-						}
-						if (checkConnectionDetails() && !alreadyConnected) {
-							host = InetAddress.getByName(hostField.getText());
-							port = Integer.parseInt(portField.getText());
-							setSocket(host, port);
-							socket.setKeepAlive(true);
-							outStream = new ObjectOutputStream(socket.getOutputStream());
-							startReceiver();
-							serverArea.appendText("\n" + "Connected to server with host: " + host + " and port: " + port);
-						} else if (!checkConnectionDetails()){
-							displayDialog(connectionDialogString);
-						}
-					} catch (ConnectException ex) {
-						System.out.println("\n" + "An Exception occured connecting to the server: " + ex);
-						displayDialog("The chat client failed to connect to the server: " + ex.toString() + ","
-								+ " the host and/or port might be incorrect, or the server might not be on.");
-						ex.printStackTrace();
-					} catch (Exception ex) {
-						System.out.println("\n" + "An Exception occured connecting to the server: " + ex);
-						ex.printStackTrace();
-						displayDialog("The chat client failed to connect to the server: " + ex.toString());
-					}
-				}
+					connect();
+				}//handle
 			});// connectButton
 
 			/*
@@ -234,57 +206,19 @@ public class App extends Application {
 			messageButton.setOnAction((EventHandler<ActionEvent>) new EventHandler<ActionEvent>() {
 				@Override
 				public void handle(ActionEvent e) {
-					try {
-						if (checkAllDetails()) {
-							message = "[" + usernameField.getText() + "]" + ": " + messageArea.getText();
-							messageArea.setText("");
-
-							Serializable object = message;
-
-							IvParameterSpec iv = new IvParameterSpec(firstPasswordField.getText().getBytes("UTF-8"));
-							SecretKeySpec skeySpec = new SecretKeySpec(secondPasswordField.getText().getBytes("UTF-8"),
-									"AES");
-							Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5PADDING");
-							cipher.init(Cipher.ENCRYPT_MODE, skeySpec, iv);
-
-							SealedObject sealedObject = new SealedObject(object, cipher);
-							outStream.writeObject(sealedObject);
-						}
-					} catch (Exception ex) {
-						displayDialog("\n" + "An Exception occured sending message: " + ex + ". Try to disconnect and reconnect to the server.");
-						System.out.println("\n" + "An Exception occured sending message: " + ex);
-						ex.printStackTrace();
-					}
-				}
+					sendMessage();
+				}//handle
 			});// messageButton
 
 			/*
 			 * disconnectButton: TODO: Comment this
 			 */
 			disconnectButton.setOnAction((EventHandler<ActionEvent>) new EventHandler<ActionEvent>() {
-				@SuppressWarnings("deprecation")
 				@Override
 				public void handle(ActionEvent e) {
-					try {
-						if (socket != null) {
-							if (socket.isConnected() && !socket.isClosed()) {
-								receivingThread.stop();
-								socket.close();
-								serverArea.appendText(
-										"\n" + "Disconnected from server with host: " + host + " and port: " + port);
-								running.set(false);
-							} else {
-								displayDialog("The chat client is not connected to the server.");
-							}
-						} else {
-							displayDialog("The chat client is not connected to the server.");
-						}
-					} catch (Exception ex) {
-						System.out.println("\n" + "An Exception occured disconnecting from the server: " + ex);
-						ex.printStackTrace();
-					}
-				}
-			});
+					disconnect();
+				}//handle
+			});//disconnectButton
 
 		} catch (Exception ex) {
 			System.out.println("\n" + "An Exception occured: " + ex);
@@ -292,6 +226,85 @@ public class App extends Application {
 		} // try-catch for whole start-method
 
 	}// start
+	
+	
+	void connect() {
+		try {
+			boolean alreadyConnected = false;
+			if(socket != null) {
+				if(socket.isConnected() && !socket.isClosed()){
+					displayDialog("Client already connected to server.");
+					alreadyConnected = true;
+				}
+			}
+			if (checkConnectionDetails() && !alreadyConnected) {
+				host = InetAddress.getByName(hostField.getText());
+				port = Integer.parseInt(portField.getText());
+				setSocket(host, port);
+				socket.setKeepAlive(true);
+				outStream = new ObjectOutputStream(socket.getOutputStream());
+				startReceiver();
+				serverArea.appendText("\n" + "Connected to server with host: " + host + " and port: " + port);
+			} else if (!checkConnectionDetails()){
+				displayDialog(connectionDialogString);
+			}
+		} catch (ConnectException ex) {
+			System.out.println("\n" + "An Exception occured connecting to the server: " + ex);
+			displayDialog("The chat client failed to connect to the server: " + ex.toString() + ","
+					+ " the host and/or port might be incorrect, or the server might not be on.");
+			ex.printStackTrace();
+		} catch (Exception ex) {
+			System.out.println("\n" + "An Exception occured connecting to the server: " + ex);
+			ex.printStackTrace();
+			displayDialog("The chat client failed to connect to the server: " + ex.toString());
+		}
+	}
+	
+	void sendMessage() {
+		try {
+			if (checkAllDetails()) {
+				message = "[" + usernameField.getText() + "]" + ": " + messageArea.getText();
+				messageArea.setText("");
+
+				Serializable object = message;
+
+				IvParameterSpec iv = new IvParameterSpec(firstPasswordField.getText().getBytes("UTF-8"));
+				SecretKeySpec skeySpec = new SecretKeySpec(secondPasswordField.getText().getBytes("UTF-8"),
+						"AES");
+				Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5PADDING");
+				cipher.init(Cipher.ENCRYPT_MODE, skeySpec, iv);
+
+				SealedObject sealedObject = new SealedObject(object, cipher);
+				outStream.writeObject(sealedObject);
+			}
+		} catch (Exception ex) {
+			displayDialog("\n" + "An Exception occured sending message: " + ex + ". Try to disconnect and reconnect to the server.");
+			System.out.println("\n" + "An Exception occured sending message: " + ex);
+			ex.printStackTrace();
+		}
+	}
+	
+	@SuppressWarnings("deprecation")
+	void disconnect() {
+		try {
+			if (socket != null) {
+				if (socket.isConnected() && !socket.isClosed()) {
+					receivingThread.stop();
+					socket.close();
+					serverArea.appendText(
+							"\n" + "Disconnected from server with host: " + host + " and port: " + port);
+					running.set(false);
+				} else {
+					displayDialog("The chat client is not connected to the server.");
+				}
+			} else {
+				displayDialog("The chat client is not connected to the server.");
+			}
+		} catch (Exception ex) {
+			System.out.println("\n" + "An Exception occured disconnecting from the server: " + ex);
+			ex.printStackTrace();
+		}
+	}
 
 	/*
 	 * startReceiver: The method startReceiver is used to create a thread and call
@@ -345,7 +358,6 @@ public class App extends Application {
 
 					String decryptedText = (String) sealedObject.getObject(cipher);
 					serverArea.appendText("\n" + decryptedText);
-
 			}
 		} catch (SocketException ex) {
 			displayDialog(
@@ -547,6 +559,29 @@ public class App extends Application {
 			ex.printStackTrace();
 		}
 	}
+	
+	TextArea getServerArea() {
+		return serverArea;
+	}
+//	void setHost(String s) {
+//		hostField.setText(s);
+//	}
+//	void setPort(String s) {
+//		portField.setText(s);
+//	}
+//	void setUsername(String s) {
+//		usernameField.setText(s);
+//	}
+//	void setFirstPassword(String s) {
+//		firstPasswordField.setText(s);
+//	}
+//	void setSecondPassword(String s) {
+//		secondPasswordField.setText(s);
+//	}
+//	void setMessage(String s) {
+//		messageArea.setText(s);
+//	}
+	
 
 	/*
 	 * main: The method main is used to call the method launch, which launches the

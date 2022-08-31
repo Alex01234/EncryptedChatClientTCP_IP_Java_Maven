@@ -145,31 +145,15 @@ class AppTest {
 	//void disconnectButton_SocketIsClosed_x()
 	
 	
+	@SuppressWarnings("deprecation")
 	@Test
-	void receivingTask_ClientReceivesMessage_x(FxRobot robot) {
-		//Create a server that accepts a connection, encrypts a message, and sends it to the client
-		
-		//Setup this client
-		
-		//Make sure that the last row of messageArea is the message received
-		
-		
-//		robot.clickOn("#messageArea").write("Hello There");
-//		
-//		String messageAreaText = app.messageArea.getText();
-//		String[] lines = messageAreaText.split("\n");
-//		String lastLine = lines[lines.length -1];
-//		System.out.println(lastLine);
-//		assertEquals(lastLine, "Hello There");
-		
-		//Server.main();
-		
-		Thread t = new Thread() {
+	void receivingTask_ClientReceivesMessage(FxRobot robot) throws Exception {		
+		Thread server = new Thread() {
 			public void run() {
 				Server.main();
 			}
 		};
-		t.start();
+		server.start();
 		
 		robot.clickOn("#hostField").write("localhost");
 		robot.clickOn("#portField").write("4848");
@@ -180,16 +164,13 @@ class AppTest {
 		robot.clickOn("#connectButton");
 		robot.clickOn("#messageButton");
 		
-		String messageAreaText = app.serverArea.getText();
+		String messageAreaText = app.getServerArea().getText();
 		String[] lines = messageAreaText.split("\n");
 		String lastLine = lines[lines.length -1];
 		assertEquals(lastLine, "[TestUser]: Test message");
 		
-		//TODO: Next step is to create get and set methods for App.java to set all details above
-		//also, break out the methods of connecting, sending and disconnecting that can be called without GUI
-		//so App.java needs some refactoring
-		//Then a second client can be created without a GUI, that can connect and send a message, so that this can be tested for real
-		
+		server.stop();
+		app.stop();
 	}
 	
 	@Test
