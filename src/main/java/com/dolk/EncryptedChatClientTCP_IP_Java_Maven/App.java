@@ -233,7 +233,7 @@ public class App extends Application {
 			boolean alreadyConnected = false;
 			if(socket != null) {
 				if(socket.isConnected() && !socket.isClosed()){
-					displayDialog("Client already connected to server.");
+					displayDialog("Client already connected to server.", "connect");
 					alreadyConnected = true;
 				}
 			}
@@ -246,17 +246,17 @@ public class App extends Application {
 				startReceiver();
 				serverArea.appendText("\n" + "Connected to server with host: " + host + " and port: " + port);
 			} else if (!checkConnectionDetails()){
-				displayDialog(connectionDialogString);
+				displayDialog(connectionDialogString, "connect");
 			}
 		} catch (ConnectException ex) {
 			System.out.println("\n" + "An Exception occured connecting to the server: " + ex);
 			displayDialog("The chat client failed to connect to the server: " + ex.toString() + ","
-					+ " the host and/or port might be incorrect, or the server might not be on.");
+					+ " the host and/or port might be incorrect, or the server might not be on.", "connect");
 			ex.printStackTrace();
 		} catch (Exception ex) {
 			System.out.println("\n" + "An Exception occured connecting to the server: " + ex);
 			ex.printStackTrace();
-			displayDialog("The chat client failed to connect to the server: " + ex.toString());
+			displayDialog("The chat client failed to connect to the server: " + ex.toString(), "connect");
 		}
 	}
 	
@@ -278,7 +278,7 @@ public class App extends Application {
 				outStream.writeObject(sealedObject);
 			}
 		} catch (Exception ex) {
-			displayDialog("\n" + "An Exception occured sending message: " + ex + ". Try to disconnect and reconnect to the server.");
+			displayDialog("\n" + "An Exception occured sending message: " + ex + ". Try to disconnect and reconnect to the server.", "sendMessage");
 			System.out.println("\n" + "An Exception occured sending message: " + ex);
 			ex.printStackTrace();
 		}
@@ -295,10 +295,10 @@ public class App extends Application {
 							"\n" + "Disconnected from server with host: " + host + " and port: " + port);
 					running.set(false);
 				} else {
-					displayDialog("The chat client is not connected to the server.");
+					displayDialog("The chat client is not connected to the server.", "disconnect");
 				}
 			} else {
-				displayDialog("The chat client is not connected to the server.");
+				displayDialog("The chat client is not connected to the server.", "disconnect");
 			}
 		} catch (Exception ex) {
 			System.out.println("\n" + "An Exception occured disconnecting from the server: " + ex);
@@ -324,7 +324,7 @@ public class App extends Application {
 			receivingThread.setDaemon(true);
 			receivingThread.start();
 		} catch (Exception ex) {
-			displayDialog("An Exception occured trying to start the thread to receive messages: " + ex);
+			displayDialog("An Exception occured trying to start the thread to receive messages: " + ex, "startReceiver");
 			System.out.println("An Exception occured trying to start the thread to receive messages: " + ex);
 			ex.printStackTrace();
 		}
@@ -361,11 +361,11 @@ public class App extends Application {
 			}
 		} catch (SocketException ex) {
 			displayDialog(
-					"A SocketException occured, as such the connection to the server was lost. Please try to reconnect.");
+					"A SocketException occured, as such the connection to the server was lost. Please try to reconnect.", "receivingTask");
 			running.set(false);
 		} catch (Exception ex) {
 			displayDialog(
-					"An Exception occured in the thread receiving messages, as such the connection to the server was lost. Please try to reconnect.");
+					"An Exception occured in the thread receiving messages, as such the connection to the server was lost. Please try to reconnect.", "receivingTask");
 			running.set(false);
 			ex.printStackTrace();
 		}
@@ -522,7 +522,7 @@ public class App extends Application {
 		}
 		if (!connectionCheck || !socketCheck || !usernameCheck || !passwordCheck || !passwordBitCheck
 				|| !messageCheck) {
-			displayDialog(dialog);
+			displayDialog(dialog, "checkAllDetails");
 			return false;
 		} else {
 			return true;
@@ -535,11 +535,13 @@ public class App extends Application {
 	 * subclass of the class Dialog), to the user. The text displayed to the user is
 	 * the parameter (of the type String) which is passed to the method.
 	 */
-	private void displayDialog(String textToDisplay) {
+	private void displayDialog(String textToDisplay, String callingMethod) {
 		Alert alert = new Alert(AlertType.ERROR);
 		alert.setTitle("An Error occured.");
 		alert.setHeaderText(null);
 		alert.setContentText(textToDisplay);
+		Button ok_button = (Button) alert.getDialogPane().lookupButton(ButtonType.OK);
+		ok_button.setId(callingMethod);
 		alert.setResizable(true);
 		alert.showAndWait();
 	}// displayDialog
@@ -563,24 +565,6 @@ public class App extends Application {
 	TextArea getServerArea() {
 		return serverArea;
 	}
-//	void setHost(String s) {
-//		hostField.setText(s);
-//	}
-//	void setPort(String s) {
-//		portField.setText(s);
-//	}
-//	void setUsername(String s) {
-//		usernameField.setText(s);
-//	}
-//	void setFirstPassword(String s) {
-//		firstPasswordField.setText(s);
-//	}
-//	void setSecondPassword(String s) {
-//		secondPasswordField.setText(s);
-//	}
-//	void setMessage(String s) {
-//		messageArea.setText(s);
-//	}
 	
 
 	/*
