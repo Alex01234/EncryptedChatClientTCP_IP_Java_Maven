@@ -1,3 +1,5 @@
+//Author: Alexander Dolk
+
 package com.dolk.EncryptedChatClientTCP_IP_Java_Maven;
 
 import java.io.IOException;
@@ -9,11 +11,13 @@ public class ServerThread extends Thread{
 	ObjectOutputStream outputStream;
 	private ObjectInputStream inputStream;
 	private Server mainServer;
+	Socket serverThreadSocket;
 	
 	public ServerThread(Socket serverThreadSocket, Server mainServer) throws IOException {
 		this.outputStream = new ObjectOutputStream(serverThreadSocket.getOutputStream());
 		this.inputStream = new ObjectInputStream(serverThreadSocket.getInputStream());
 		this.mainServer = mainServer;
+		this.serverThreadSocket = serverThreadSocket;
 	}
 	
 	@Override
@@ -27,5 +31,5 @@ public class ServerThread extends Thread{
 			ex.printStackTrace();
 		}
 	}
-
+	
 }

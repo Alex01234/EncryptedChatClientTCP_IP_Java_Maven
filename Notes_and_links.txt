@@ -1,0 +1,19 @@
+How to write unit tests:
+https://www.vogella.com/tutorials/JUnit/article.html
+
+How to convert a Java project into a Maven project in Eclipse:
+https://www.vogella.com/tutorials/EclipseMaven/article.html#exercise-converting-a-java-project-create-with-eclipse-to-maven
+
+How to build a Java app with Maven:
+https://www.jenkins.io/doc/tutorials/build-a-java-app-with-maven/
+
+How to bring an Eclipse project to Github as an Repository:
+https://o7planning.org/13083/bring-an-eclipse-project-to-github-as-an-repository?fbclid=IwAR270tb8ZYfPdPDf5o41BHso-iPvPISEQQif4gwhWABdT0h4dIoUvCT4tQY
+
+Adding git credentials in Eclipse:
+https://www.geeksforgeeks.org/how-to-add-git-credentials-in-eclipse/
+https://stackoverflow.com/questions/8756006/eclipse-egit-push-to-remote-menu-choice-is-grayed-out
+
+How to Test JavaFX:
+https://medium.com/information-and-technology/test-driven-development-in-javafx-with-testfx-66a84cd561e0
+https://github.com/TestFX/TestFX

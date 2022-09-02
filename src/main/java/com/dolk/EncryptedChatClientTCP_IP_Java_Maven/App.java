@@ -5,9 +5,7 @@ package com.dolk.EncryptedChatClientTCP_IP_Java_Maven;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
-import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
-
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -15,17 +13,13 @@ import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
 import java.net.*;
 import java.util.concurrent.atomic.AtomicBoolean;
-
 import javax.crypto.Cipher;
 import javax.crypto.SealedObject;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
-import javafx.application.*;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
-import javafx.stage.*;
-import javafx.scene.*;
 import javafx.scene.control.*;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.layout.BorderPane;
@@ -88,17 +82,6 @@ public class App extends Application {
 	private static String passwordBitString = "Password 1 and/or Password 2 is not 128 bits in length. ";
 	private static String messageDialogString = "Message is empty. ";
 
-	/*
-	 * start: The method start is called when the JavaFX application is launched. In
-	 * the method start, a number of Labels, TextFields, Buttons and TextArea are
-	 * created and added to Hbox:es and a VBox. Those HBox:es and the VBox are added
-	 * to a BorderPane. A Scene is created, which shows the BorderPane.
-	 * 
-	 * Additionally, values for the property setOnAction are declared for the
-	 * Buttons that exist in the application which determine the functionality of
-	 * the application. Please see the comments below for more specific details,
-	 * where the values for the property setOnAction are declared.
-	 */
 	@Override
 	public void start(Stage stage) {
 		try {
@@ -158,66 +141,26 @@ public class App extends Application {
 			stage.setScene(scene);
 			stage.show();
 			stage.setTitle("Sealed Chat Client");
-
-			/*
-			 * connectButton: Here the method setOnAction is defined for the Button
-			 * connectButton. First, the method checkConnectionDetails is called. If the
-			 * returning value is true, the following is done: The InetAddress host is set
-			 * to the text that has been submitted to the TextField hostField, the int port
-			 * is set to the text that has been submitted to the TextFiedld portField, the
-			 * Socket socket is set to an instance of the class Socket with the parameters
-			 * host and port, the ObjectOutputStream is set to an instance of the class
-			 * ObjectOutputStream with the parameter socket.getOutputStream(), the method
-			 * startReceiver is called and a text is appended to the TextArea serverArea
-			 * that indicates that a connection has been made to the server with the host
-			 * and port submitted by the user.
-			 * 
-			 * If the method checkConncetionDetails returns false, the method displayDialog
-			 * is called with the parameter of the static String connectionDialogString.
-			 * 
-			 * TODO: Update comments
-			 */
+			
 			connectButton.setOnAction((EventHandler<ActionEvent>) new EventHandler<ActionEvent>() {
 				@Override
 				public void handle(ActionEvent e) {
 					connect();
-				}//handle
+				}
 			});// connectButton
 
-			/*
-			 * messageButton: Here the method setOnAction is defined for the Button
-			 * messageButton. First, the method checkAllDetails is called. If the returning
-			 * value is true, the following is done: The String message is set to the text
-			 * submitted to the TextField usernameField and the text submitted to the
-			 * TextArea messageArea, the TextArea messageArea is then cleared of text.
-			 * 
-			 * An instance of the class Serializable is created using the String message, an
-			 * instance of the class IvParameterSpec is created using the text submitted to
-			 * the TextField firstPasswordField, an instance of the class SecretKeySpec is
-			 * created using the text submitted to the TextField secondPasswordField, an
-			 * instance of the class Cipher is created with the transformation
-			 * "AES/CBC/PKCS5PADDING", the Cipher is initialized in encryption mode using
-			 * the IvParameterSpec and SecretKeySpec.
-			 * 
-			 * A SealedObject is created using the instance of the class Serializable (the
-			 * message) and the Cipher and the SealedObject is then written to the
-			 * ObjectOutputStream outStream.
-			 */
 			messageButton.setOnAction((EventHandler<ActionEvent>) new EventHandler<ActionEvent>() {
 				@Override
 				public void handle(ActionEvent e) {
 					sendMessage();
-				}//handle
+				}
 			});// messageButton
 
-			/*
-			 * disconnectButton: TODO: Comment this
-			 */
 			disconnectButton.setOnAction((EventHandler<ActionEvent>) new EventHandler<ActionEvent>() {
 				@Override
 				public void handle(ActionEvent e) {
 					disconnect();
-				}//handle
+				}
 			});//disconnectButton
 
 		} catch (Exception ex) {
@@ -258,7 +201,7 @@ public class App extends Application {
 			ex.printStackTrace();
 			displayDialog("The chat client failed to connect to the server: " + ex.toString(), "connect");
 		}
-	}
+	}//connect
 	
 	void sendMessage() {
 		try {
@@ -282,7 +225,7 @@ public class App extends Application {
 			System.out.println("\n" + "An Exception occured sending message: " + ex);
 			ex.printStackTrace();
 		}
-	}
+	}//sendMessage
 	
 	@SuppressWarnings("deprecation")
 	void disconnect() {
@@ -304,13 +247,8 @@ public class App extends Application {
 			System.out.println("\n" + "An Exception occured disconnecting from the server: " + ex);
 			ex.printStackTrace();
 		}
-	}
+	}//disconnect
 
-	/*
-	 * startReceiver: The method startReceiver is used to create a thread and call
-	 * the method start on that thread. The threads run-method then calls the method
-	 * receivingTask.
-	 */
 	private void startReceiver() {
 		try {
 			Runnable runnable = new Runnable() {
@@ -330,25 +268,11 @@ public class App extends Application {
 		}
 	}// startReceiver
 
-	/*
-	 * receivingTask: The method receivingTask is used to run an infinite
-	 * while-loop, which listens to the Socket socket. An ObjectInputStream is
-	 * created from the Socket socket and from the ObjectInputStream, a SealedObject
-	 * is read. A Cipher is created using the passwords that have been submitted to
-	 * the TextFields firstPasswordField and secondPasswordField. Using the Cipher,
-	 * the Object (which is a String) is retrieved and decrypted from the
-	 * SealedObject. The decrypted String is then appended to the TextArea
-	 * serverArea.
-	 * 
-	 * TODO: Update comments
-	 */
 	private void receivingTask() {
 		try {
 			running.set(true);
 			inStream = new ObjectInputStream(socket.getInputStream());
 			while (running.get()) {
-
-					//inStream = new ObjectInputStream(socket.getInputStream());
 					SealedObject sealedObject = (SealedObject) inStream.readObject();
 
 					IvParameterSpec iv = new IvParameterSpec(firstPasswordField.getText().getBytes("UTF-8"));
@@ -371,14 +295,6 @@ public class App extends Application {
 		}
 	}// receivingTask
 
-	/*
-	 * checkConnectionDetails: The method checkConnectionDetails is used to check if
-	 * the TextFields hostField and portField contains text or are empty. If either
-	 * hostField or portField is empty, the color of the text on the Button
-	 * connectButton is set to red and the method returns false. If both hostField
-	 * and portField contains text, the color of the text on connectButton is set to
-	 * green and the method returns true.
-	 */
 	boolean checkConnectionDetails() {
 		if (hostField.getText() == null || hostField.getText().trim().isEmpty() || portField.getText() == null
 				|| portField.getText().trim().isEmpty()) {
@@ -390,11 +306,6 @@ public class App extends Application {
 		}
 	}// checkConnectionDetails
 
-	/*
-	 * checkUsernameDetails: The method checkUsernameDetails is used to check if the
-	 * TextField usernameField contains text or is empty. If usernameField is empty,
-	 * the method returns false. Otherwise, the method returns true.
-	 */
 	boolean checkUsernameDetails() {
 		if (usernameField.getText() == null || usernameField.getText().trim().isEmpty()) {
 			return false;
@@ -403,13 +314,6 @@ public class App extends Application {
 		}
 	}// checkUsernameDetails
 
-	/*
-	 * checkPasswordDetails: The method checkPasswordDetails is used to check if the
-	 * TextFields firstPasswordField and secondPasswordField contains text or are
-	 * empty. If firstPasswordField or secondPasswordField is empty, the method
-	 * returns false. If both firstPasswordField and secondPasswordField contains
-	 * text, the method returns true.
-	 */
 	boolean checkPasswordDetails() {
 		if (firstPasswordField.getText() == null || firstPasswordField.getText().trim().isEmpty()
 				|| secondPasswordField.getText() == null || secondPasswordField.getText().trim().isEmpty()) {
@@ -419,15 +323,6 @@ public class App extends Application {
 		}
 	}// checkPasswordDetails
 
-	/*
-	 * checkPasswordBits: The method checkPasswordBits is used to check that the
-	 * length of submitted texts in the TextFields firstPasswordField and
-	 * secondPasswordField is 16 bytes in length, which is equivalent to 128 bits.
-	 * If the submitted text to either firstPasswordField or secondPasswordField is
-	 * not 16 bytes in length, the method returns false. If both of the submitted
-	 * texts to firstPasswordField and secondPasswordField are 16 bytes in length,
-	 * the method returns true.
-	 */
 	boolean checkPasswordBits() throws UnsupportedEncodingException {
 		boolean control1 = true;
 		boolean control2 = true;
@@ -450,13 +345,6 @@ public class App extends Application {
 
 	}// checkPasswordBits
 
-	/*
-	 * checkMessageDetails: The method checkMessageDetails is used to check if the
-	 * TextArea messageArea is empty or if it contains text. If messageArea is
-	 * empty, the color of text on the Button messageButton is changed to red and
-	 * the method returns false. If messageArea contains text, the color of the text
-	 * on messageButton is changed to green and the method returns true.
-	 */
 	boolean checkMessageDetails() {
 		if (messageArea.getText() == null || messageArea.getText().trim().isEmpty()) {
 			messageButton.setStyle("-fx-text-fill: #ff0000"); // changes color of text in button to red
@@ -467,9 +355,6 @@ public class App extends Application {
 		}
 	}// checkMessageDetails
 
-	/*
-	 * checkSocketStatus: TODO: Comment this
-	 */
 	boolean checkSocketStatus() {
 		boolean socketConnected = false;
 		if (socket != null) {
@@ -478,21 +363,8 @@ public class App extends Application {
 			}
 		}
 		return socketConnected;
-	}
+	}//checkSocketStatus
 
-	/*
-	 * checkAllDetails: The method checkAllDetails is used to call a number of other
-	 * utility methods, which are: the methods checkConnectionDetails,
-	 * checkUsernameDetails, checkPasswordDetails, checkPasswordBits and
-	 * checkMessageDetails. The returning boolean value of the above methods are
-	 * saved locally and if a method returns false, a corresponding static String is
-	 * appended to the local String dialog. If one of the methods above returns
-	 * false, the method displayDialog is called with the parameter of the String
-	 * dialog and the method checkAllDetails returns false. Otherwise, the method
-	 * checkAllDetails returns true.
-	 * 
-	 * TODO: Update comments
-	 */
 	boolean checkAllDetails() throws UnsupportedEncodingException {
 		boolean connectionCheck = checkConnectionDetails();
 		boolean socketCheck = checkSocketStatus();
@@ -530,11 +402,6 @@ public class App extends Application {
 
 	}// checkAllDetails
 
-	/*
-	 * displayDialog: The method displayDialog is used to show an Alert (which is a
-	 * subclass of the class Dialog), to the user. The text displayed to the user is
-	 * the parameter (of the type String) which is passed to the method.
-	 */
 	private void displayDialog(String textToDisplay, String callingMethod) {
 		Alert alert = new Alert(AlertType.ERROR);
 		alert.setTitle("An Error occured.");
@@ -544,7 +411,7 @@ public class App extends Application {
 		ok_button.setId(callingMethod);
 		alert.setResizable(true);
 		alert.showAndWait();
-	}// displayDialog
+	}//displayDialog
 	
 	void setSocket(InetAddress host, int port) {
 		try {
@@ -552,7 +419,7 @@ public class App extends Application {
 		} catch (IOException ex) {
 			ex.printStackTrace();
 		}
-	}
+	}//setSocket
 	
 	void closeSocket() {
 		try {
@@ -560,19 +427,17 @@ public class App extends Application {
 		} catch (IOException ex) {
 			ex.printStackTrace();
 		}
-	}
+	}//closeSocket
 	
 	TextArea getServerArea() {
 		return serverArea;
-	}
+	}//getServerArea
+	TextArea getMessageArea() {
+		return messageArea;
+	}//getMessageArea
 	
-
-	/*
-	 * main: The method main is used to call the method launch, which launches the
-	 * JavaFX application.
-	 */
 	public static void main(String[] args) {
 		launch(args);
-	}// main
+	}//main
 
 }// App
