@@ -268,7 +268,7 @@ public class App extends Application {
 		}
 	}// startReceiver
 
-	private void receivingTask() {
+	private void receivingTask() { 
 		try {
 			running.set(true);
 			inStream = new ObjectInputStream(socket.getInputStream());
