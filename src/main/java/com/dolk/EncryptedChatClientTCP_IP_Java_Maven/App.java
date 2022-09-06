@@ -273,15 +273,17 @@ public class App extends Application {
 			running.set(true);
 			inStream = new ObjectInputStream(socket.getInputStream());
 			while (running.get()) {
-					SealedObject sealedObject = (SealedObject) inStream.readObject();
+					try {
+						SealedObject sealedObject = (SealedObject) inStream.readObject();
 
-					IvParameterSpec iv = new IvParameterSpec(firstPasswordField.getText().getBytes("UTF-8"));
-					SecretKeySpec skeySpec = new SecretKeySpec(secondPasswordField.getText().getBytes("UTF-8"), "AES");
-					Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5PADDING");
-					cipher.init(Cipher.DECRYPT_MODE, skeySpec, iv);
+						IvParameterSpec iv = new IvParameterSpec(firstPasswordField.getText().getBytes("UTF-8"));
+						SecretKeySpec skeySpec = new SecretKeySpec(secondPasswordField.getText().getBytes("UTF-8"), "AES");
+						Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5PADDING");
+						cipher.init(Cipher.DECRYPT_MODE, skeySpec, iv);
 
-					String decryptedText = (String) sealedObject.getObject(cipher);
-					serverArea.appendText("\n" + decryptedText);
+						String decryptedText = (String) sealedObject.getObject(cipher);
+						serverArea.appendText("\n" + decryptedText);
+					} catch (Exception e) {}
 			}
 		} catch (SocketException ex) {
 			displayDialog(
