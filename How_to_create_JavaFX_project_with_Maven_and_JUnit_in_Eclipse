@@ -12,6 +12,8 @@ Go to the file App.java and mark the keyword for the class “App”, and click 
 Move the new test class to the folder "test", but add it to the same package as the class that is to be tested, as per this link: https://stackoverflow.com/questions/2388253/separation-of-junit-classes-into-special-test-package
 Use this framework/package to test the JavaFX GUI: https://github.com/TestFX/TestFX
 
+Also helpful link: https://stackoverflow.com/questions/22914927/creating-a-src-main-java-folder-structure-in-eclipse-without-maven#:~:text=Open%20Properties%20%3E%20Java%20Build%20Path,Folders%20to%20add%20source%20folders.&text=You%20simply%20cannot%20have%20src,it%20by%20default)...
+
 Add the following dependencies to the pom.xml file: 
 		<dependency>
 			<groupId>org.junit.jupiter</groupId>
