@@ -10,7 +10,7 @@ As demonstrated in the GIF, the four clients are all connected to the same serve
 ![GIF showing demo of the chat client](https://github.com/Alex01234/EncryptedChatClientTCP_IP_Java_Maven/blob/master/EncryptedChatClient_demo.gif?)
 
 ## Testing and test coverage 
-Unit tests have been written for the using the [TestFX](https://github.com/TestFX/TestFX) API, with JUnit 5 and Hamcrest matchers. The tests cover the application by 80.8%. 
+Unit tests have been written using the [TestFX](https://github.com/TestFX/TestFX) API, with JUnit 5 and Hamcrest matchers. The tests cover the application by 80.8%. 
 ![Image showing test coverage of 80,8% for class App.java](https://github.com/Alex01234/EncryptedChatClientTCP_IP_Java_Maven/blob/master/EncryptedChatClientTCP_IP_Java_Maven_test_coverage.PNG?raw=true)
 
 ## Technicalities
